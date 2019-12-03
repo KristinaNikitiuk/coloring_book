@@ -1,5 +1,7 @@
 import cv2
-import numpy as np
+
+SCALE = 3
+DELTA = 0
 
 
 class ImageProcessing(object):
@@ -13,24 +15,13 @@ class ImageProcessing(object):
         return gray
 
     def sobel_filter(self):
-
         gray_img = self._img_to_gray()
+        img = cv2.GaussianBlur(gray_img, (3, 3), 0)
 
-        sobel_x = np.array([[-1, 0, 1],
-                            [-2, 0, 2],
-                            [-1, 0, 1]])
-
-        sobel_y = np.array([[-1, -2, -1],
-                            [0, 0, 0],
-                            [1, 2, 1]])
-
-        grad_x = cv2.filter2D(gray_img, cv2.CV_32F, sobel_x)
-        grad_y = cv2.filter2D(gray_img, cv2.CV_32F, sobel_y)
-
-        grad_x_norm = np.abs(grad_x) / np.max(np.abs(grad_x))
-        grad_y_norm = np.abs(grad_y) / np.max(np.abs(grad_y))
-
-        result_img = np.sqrt(grad_x_norm ** 2 + grad_y_norm ** 2)
-        # theta = np.arctan2(grad_y_norm, grad_x_norm)
+        gradx = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=3, scale=SCALE, delta=DELTA)
+        gradx = cv2.convertScaleAbs(gradx)
+        grady = cv2.Sobel(gray_img, cv2.CV_64F, 0, 1, ksize=3, scale=SCALE, delta=DELTA)
+        grady = cv2.convertScaleAbs(grady)
+        result_img = cv2.addWeighted(gradx, 0.5, grady, 0.5, 0)
 
         return result_img
