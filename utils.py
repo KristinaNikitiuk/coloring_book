@@ -14,7 +14,7 @@ class Utils(object):
         output = cv2.resize(self.image, dsize)
         return output
 
-    def inverte(self):
+    def inverte_colors(self):
         return 255 - self.image
 
     def plot_img(self, img):
