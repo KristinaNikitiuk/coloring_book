@@ -1,18 +1,19 @@
 import cv2
 
-from image_processing import ImageProcessing
-from utils import Utils
-
+from coloring_book.image_processing import ImageProcessing
+from coloring_book.utils import Utils
 
 SCALE_PERCENT = 30
 
 
-if __name__ == '__main__':
+def main():
+    src = cv2.imread('images/peppa1.png', 0)
 
-    src = cv2.imread('images/peppa.png', 0)
-
-    # output = Utils(src).image_resize(SCALE_PERCENT)
     countoured_img = ImageProcessing(src).sobel_filter()
     res = Utils(countoured_img).inverte_colors()
     Utils(src).plot_img(res)
+
+
+if __name__ == '__main__':
+    main()
 
